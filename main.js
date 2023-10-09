@@ -2,6 +2,15 @@ window.addEventListener("load", function () {
   const form = document.querySelector("#todo-form");
   const input = document.querySelector("#add-item");
   const taskList = document.querySelector("#tasks");
+  const inputField = document.querySelector("#add-item");
+
+  const storedInput = JSON.parse(localStorage.getItem("keyName")) || [];
+
+  storedInput.forEach(function (storedTask) {
+    renderTask(storedTask);
+  });
+
+  inputField.value = "";
 
   form.addEventListener("submit", function (event) {
     event.preventDefault();
@@ -12,7 +21,16 @@ window.addEventListener("load", function () {
       alert("Please enter a ToDo");
       return;
     }
+    storedInput.push(task);
 
+    localStorage.setItem("keyName", JSON.stringify(storedInput));
+
+    renderTask(task);
+
+    input.value = "";
+  });
+
+  function renderTask(taskText) {
     const taskElement = document.createElement("div");
     taskElement.classList.add("task");
 
@@ -24,8 +42,8 @@ window.addEventListener("load", function () {
     const taskInput = document.createElement("input");
     taskInput.classList.add("text");
     taskInput.type = "text";
-    taskInput.value = task;
-    taskInput.setAttribute("readonly", "readyonly");
+    taskInput.value = taskText;
+    taskInput.setAttribute("readonly", "readonly");
 
     taskContent.appendChild(taskInput);
 
@@ -46,12 +64,16 @@ window.addEventListener("load", function () {
     taskElement.appendChild(taskActions);
     taskList.appendChild(taskElement);
 
-    input.value = "";
-
     taskDelete.addEventListener("click", function (event) {
+      const index = storedInput.indexOf(taskText);
+      if (index !== -1) {
+        storedInput.splice(index, 1);
+      }
+
+      localStorage.setItem("keyName", JSON.stringify(taskText));
+
       taskElement.parentNode.removeChild(taskElement);
     });
-
 
     taskEdit.addEventListener("click", function (event) {
       if (taskEdit.innerText.toLowerCase() == "edit") {
@@ -63,5 +85,5 @@ window.addEventListener("load", function () {
         taskEdit.innerText = "Edit";
       }
     });
-  });
+  }
 });
