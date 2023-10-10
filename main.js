@@ -4,10 +4,10 @@ window.addEventListener("load", function () {
   const taskList = document.querySelector("#tasks");
   const inputField = document.querySelector("#add-item");
 
-  const storedInput = JSON.parse(localStorage.getItem("keyName")) || [];
+  const storedInput = JSON.parse(localStorage.getItem("tasks")) || [];
 
-  storedInput.forEach(function (storedTask) {
-    renderTask(storedTask);
+  storedInput.forEach(function (taskText) {
+    renderTask(taskText);
   });
 
   inputField.value = "";
@@ -21,9 +21,13 @@ window.addEventListener("load", function () {
       alert("Please enter a ToDo");
       return;
     }
+    if (storedInput.includes(task)) {
+      alert("This task already exists.");
+      return;
+    }
     storedInput.push(task);
 
-    localStorage.setItem("keyName", JSON.stringify(storedInput));
+    localStorage.setItem("tasks", JSON.stringify(storedInput));
 
     renderTask(task);
 
@@ -70,7 +74,7 @@ window.addEventListener("load", function () {
         storedInput.splice(index, 1);
       }
 
-      localStorage.setItem("keyName", JSON.stringify(taskText));
+      localStorage.setItem("tasks", JSON.stringify(taskText));
 
       taskElement.parentNode.removeChild(taskElement);
     });
