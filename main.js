@@ -2,15 +2,14 @@ window.addEventListener("load", function () {
   const form = document.querySelector("#todo-form");
   const input = document.querySelector("#add-item");
   const taskList = document.querySelector("#tasks");
-  const inputField = document.querySelector("#add-item");
 
-  const storedInput = JSON.parse(localStorage.getItem("tasks")) || [];
-
+  const storedInput = JSON.parse(localStorage.getItem("todo")) || [];
+  
   storedInput.forEach(function (taskText) {
     renderTask(taskText);
   });
 
-  inputField.value = "";
+  input.value = "";
 
   form.addEventListener("submit", function (event) {
     event.preventDefault();
@@ -27,7 +26,7 @@ window.addEventListener("load", function () {
     }
     storedInput.push(task);
 
-    localStorage.setItem("tasks", JSON.stringify(storedInput));
+    localStorage.setItem("todo", JSON.stringify(storedInput));
 
     renderTask(task);
 
@@ -74,7 +73,7 @@ window.addEventListener("load", function () {
         storedInput.splice(index, 1);
       }
 
-      localStorage.setItem("tasks", JSON.stringify(taskText));
+      localStorage.setItem("todo", JSON.stringify(storedInput));
 
       taskElement.parentNode.removeChild(taskElement);
     });
